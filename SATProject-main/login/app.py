@@ -237,21 +237,39 @@ def startQuiz():
     
     if not userId:
         return render_template("startQuiz.html", username=None)
-    elif userId:
+    else:
         try:
             username = db.execute("SELECT username FROM users WHERE id = ?", userId)
         except Exception as e:
-            return "Exception"
+            return "Database Exception: " + str(e)
         
-        return render_template("startQuiz.html", username=username[0]["username"])
+        if username:
+            return render_template("startQuiz.html", username=username[0]["username"])
+        else:
+            return render_template("startQuiz.html", username=None)
 
 @app.route("/quiz", methods=["GET", "POST"])
 def quiz():
     if request.method == "POST":
-        questions = request.form.get("questions")
-        subject = request.form.get("subject")
-        # Just return the selected values for now
-        return f"Questions: {questions}  Subject: {subject}"
+        question_count = int(request.form.get("questions", 5))
+        subject = request.form.get("subject", "Math")
 
-    return render_template("quiz.html")
+        questions = db.execute(
+            "SELECT * FROM questions WHERE subject = ? ORDER BY RANDOM() LIMIT ?",
+            subject, question_count
+        )
 
+        for q in questions:
+            options = db.execute(
+                "SELECT optionLabel, optionText FROM answers WHERE questionId = ? ORDER BY optionLabel",
+                q["id"]
+            )
+            q["options"] = options
+
+        return render_template("quiz.html", questions=questions, subject=subject)
+    else:
+        return redirect("/startQuiz")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

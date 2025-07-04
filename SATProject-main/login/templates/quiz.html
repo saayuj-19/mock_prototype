@@ -1,99 +1,32 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ subject }} Quiz</title>
+</head>
+<body>
+    <h1>{{ subject }} Quiz</h1>
+    <form action="/submit-quiz" method="POST">
+        {% for q in questions %}
+            <div>
+                <p><strong>Q{{ loop.index }}:</strong> {{ q.questionText }}</p>
 
-{% block title %}SAT Practice Test - SAT Mock{% endblock %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/quizCss.css') }}">
-{% endblock %}
-
-
-{% block body %}
-<!-- Quiz Header -->
-<header class="quiz-header">
-    <div class="container">
-        <div class="header-content">
-            <div class="quiz-title">
-                <h1>SAT Practice Test</h1>
-                <span class="subject-badge" id="subjectBadge">Math</span>
+                {% if q.questionType == 'MCQ' %}
+                    {% for opt in q.options %}
+                        <input type="radio" 
+                               id="q{{ q.id }}_{{ opt.optionLabel }}" 
+                               name="answer_{{ q.id }}" 
+                               value="{{ opt.optionLabel }}" required>
+                        <label for="q{{ q.id }}_{{ opt.optionLabel }}">{{ opt.optionLabel }}. {{ opt.optionText }}</label><br>
+                    {% endfor %}
+                {% elif q.questionType == 'SPR' %}
+                    <!-- For Short/Paragraph Response, use textarea -->
+                    <textarea name="answer_{{ q.id }}" rows="3" cols="50" required></textarea>
+                {% endif %}
             </div>
-            <div class="header-right">
-                <div class="timer">
-                    <span class="timer-icon">⏱️</span>
-                    <span id="timerDisplay">25:00</span>
-                </div>
-                <button class="submit-btn" onclick="submitQuiz()">
-                    📋 Submit Quiz
-                </button>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Progress Section -->
-<div class="progress-section">
-    <div class="container">
-        <div class="progress-info">
-            <span class="question-info" id="questionInfo">Question 1 of 5</span>
-            <span class="answered-info" id="answeredInfo">0 answered</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width: 20%"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Main Content -->
-<main class="container">
-    <!-- Question Section -->
-    <div class="question-section">
-        <div class="question-content">
-            <div class="question-text" id="questionText">
-                If 3x + 7 = 22, what is the value of x?
-            </div>
-            <div class="options-list" id="optionsList">
-                <div class="option" onclick="selectOption(0)">
-                    <div class="option-letter">A</div>
-                    <div class="option-text">3</div>
-                </div>
-                <div class="option" onclick="selectOption(1)">
-                    <div class="option-letter">B</div>
-                    <div class="option-text">5</div>
-                </div>
-                <div class="option" onclick="selectOption(2)">
-                    <div class="option-letter">C</div>
-                    <div class="option-text">7</div>
-                </div>
-                <div class="option" onclick="selectOption(3)">
-                    <div class="option-letter">D</div>
-                    <div class="option-text">15</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="navigation">
-        <div class="nav-content">
-            <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" disabled>
-                ← Previous
-            </button>
-            
-            <div class="question-numbers" id="questionNumbers">
-                <div class="question-number current" onclick="goToQuestion(0)">1</div>
-                <div class="question-number" onclick="goToQuestion(1)">2</div>
-                <div class="question-number" onclick="goToQuestion(2)">3</div>
-                <div class="question-number" onclick="goToQuestion(3)">4</div>
-                <div class="question-number" onclick="goToQuestion(4)">5</div>
-            </div>
-            
-            <button class="nav-btn primary" id="nextBtn" onclick="nextQuestion()">
-                Next →
-            </button>
-        </div>
-    </div>
-</main>
-{% endblock %}
-
-{% block js %}
-<script src="{{ url_for('static', filename='js/quizJs.js') }}" ></script>
-{% endblock %}
+            <hr>
+        {% endfor %}
+        <button type="submit">Submit Answers</button>
+    </form>
+</body>
+</html>

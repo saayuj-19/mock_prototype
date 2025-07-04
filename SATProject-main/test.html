@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Setup - SAT Mock</title>
+    <style>
+        /* Additional styles specific to quiz setup page */
+        .quiz-setup-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .setup-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .setup-subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .setup-form {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 2rem;
+        }
+
+        .section-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* Custom Dropdown Styles */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+        }
+
+        .dropdown-button {
+            width: 100%;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            min-height: 60px;
+        }
+
+        .dropdown-button:hover {
+            border-color: #cbd5e1;
+            background: #f1f5f9;
+        }
+
+        .dropdown-button.active {
+            border-color: #4f46e5;
+            background: #eff6ff;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .dropdown-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+        }
+
+        .dropdown-title {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .dropdown-subtitle {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .dropdown-placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .dropdown-arrow {
+            font-size: 1.2rem;
+            color: #64748b;
+            transition: transform 0.2s;
+        }
+
+        .dropdown-button.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #4f46e5;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-option {
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .dropdown-option:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-option:hover {
+            background: #f8fafc;
+        }
+
+        .dropdown-option.selected {
+            background: #eff6ff;
+            color: #4f46e5;
+        }
+
+        .option-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .dropdown-option.selected .option-icon {
+            background: #eff6ff;
+        }
+
+        .option-details {
+            flex: 1;
+        }
+
+        .option-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .option-description {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .dropdown-option.selected .option-title {
+            color: #4f46e5;
+        }
+
+        .quiz-summary {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+        }
+
+        .quiz-summary.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .summary-title {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .summary-details {
+            color: #1e40af;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-label {
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-start {
+            background: #4f46e5;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .btn-start:hover:not(:disabled) {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-start:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-back {
+            background: transparent;
+            color: #64748b;
+            padding: 1rem 2rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            min-width: 160px;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background: #f9fafb;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar styling for dropdown menu */
+        .dropdown-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-setup-container {
+                padding: 1rem;
+            }
+
+            .setup-form {
+                padding: 2rem;
+            }
+
+            .setup-title {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-start,
+            .btn-back {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">📚</div>
+                    SAT Mock
+                </a>
+                <div class="nav-center">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-buttons" id="navButtons">
+                    <!-- Navigation will be populated by JavaScript -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="quiz-setup-container">
+                <!-- Header -->
+                <div class="setup-header">
+                    <h1 class="setup-title">Customize Your <span style="color: #4f46e5;">Quiz</span></h1>
+                    <p class="setup-subtitle">Choose your preferred settings to create a personalized SAT practice experience.</p>
+                </div>
+
+                <!-- Setup Form -->
+                <div class="setup-form">
+                    <!-- Number of Questions -->
+                    <div class="form-section">
+                        <div class="section-label">
+                            📊 Number of Questions
+                        </div>
+                        <div class="section-description">
+                            Select how many questions you'd like to practice with.
+                        </div>
+                        <div class="custom-dropdown" id="questionsDropdown">
+                            <div class="dropdown-button" onclick="toggleDropdown('questionsDropdown')">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-title dropdown-placeholder">Select number of questions</div>
+                                </div>
+                                <div class="dropdown-arrow">▼</div>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-option" data-questions="5" onclick="selectQuestions(5)">
+                                    <div class="option-icon">⚡</div>
+                                    <div class="option-details">
+                                        <div class="option-title">5 Questions</div>
+                                        <div class="option-description">Quick practice session • 8-10 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-questions="10" onclick="selectQuestions(10)">
+                                    <div class="option-icon">🎯</div>
+                                    <div class="option-details">
+                                        <div class="option-title">10 Questions</div>
+                                        <div class="option-description">Focused practice • 15-20 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-questions="15" onclick="selectQuestions(15)">
+                                    <div class="option-icon">💪</div>
+                                    <div class="option-details">
+                                        <div class="option-title">15 Questions</div>
+                                        <div class="option-description">Extended practice • 25-30 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-questions="20" onclick="selectQuestions(20)">
+                                    <div class="option-icon">🏆</div>
+                                    <div class="option-details">
+                                        <div class="option-title">20 Questions</div>
+                                        <div class="option-description">Full section practice • 35-40 minutes</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subject Selection -->
+                    <div class="form-section">
+                        <div class="section-label">
+                            📚 Subject Area
+                        </div>
+                        <div class="section-description">
+                            Choose the SAT subject area you want to focus on.
+                        </div>
+                        <div class="custom-dropdown" id="subjectDropdown">
+                            <div class="dropdown-button" onclick="toggleDropdown('subjectDropdown')">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-title dropdown-placeholder">Select subject area</div>
+                                </div>
+                                <div class="dropdown-arrow">▼</div>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-option" data-subject="math" onclick="selectSubject('math')">
+                                    <div class="option-icon">🔢</div>
+                                    <div class="option-details">
+                                        <div class="option-title">Mathematics</div>
+                                        <div class="option-description">Algebra, geometry, trigonometry, and data analysis</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-subject="reading" onclick="selectSubject('reading')">
+                                    <div class="option-icon">📖</div>
+                                    <div class="option-details">
+                                        <div class="option-title">Reading Comprehension</div>
+                                        <div class="option-description">Reading comprehension, vocabulary, and analysis</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-subject="writing" onclick="selectSubject('writing')">
+                                    <div class="option-icon">✍️</div>
+                                    <div class="option-details">
+                                        <div class="option-title">Writing & Language</div>
+                                        <div class="option-description">Grammar, usage, rhetoric, and editing skills</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-subject="mixed" onclick="selectSubject('mixed')">
+                                    <div class="option-icon">🎲</div>
+                                    <div class="option-details">
+                                        <div class="option-title">Mixed Practice</div>
+                                        <div class="option-description">Random questions from all SAT subject areas</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Summary -->
+                    <div class="quiz-summary" id="quizSummary">
+                        <div class="summary-title">
+                            📋 Quiz Summary
+                        </div>
+                        <div class="summary-details" id="summaryContent">
+                            <!-- Summary will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="dashboard.html" class="btn-back">← Back to Dashboard</a>
+                        <button class="btn-start" id="startQuizBtn" onclick="startQuiz()" disabled>
+                            Start Quiz 🚀
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 SAT Mock Testing Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        let selectedQuestions = null;
+        let selectedSubject = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (!checkAuth()) return;
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-dropdown')) {
+                    closeAllDropdowns();
+                }
+            });
+        });
+
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const button = dropdown.querySelector('.dropdown-button');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            
+            // Close other dropdowns
+            document.querySelectorAll('.custom-dropdown').forEach(dd => {
+                if (dd.id !== dropdownId) {
+                    dd.querySelector('.dropdown-button').classList.remove('active');
+                    dd.querySelector('.dropdown-menu').classList.remove('active');
+                }
+            });
+            
+            // Toggle current dropdown
+            button.classList.toggle('active');
+            menu.classList.toggle('active');
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+                dropdown.querySelector('.dropdown-button').classList.remove('active');
+                dropdown.querySelector('.dropdown-menu').classList.remove('active');
+            });
+        }
+
+        function selectQuestions(count) {
+            selectedQuestions = count;
+            
+            // Update dropdown display
+            const dropdown = document.getElementById('questionsDropdown');
+            const button = dropdown.querySelector('.dropdown-button');
+            const content = button.querySelector('.dropdown-content');
+            
+            // Remove previous selections
+            dropdown.querySelectorAll('.dropdown-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            const selectedOption = dropdown.querySelector(`[data-questions="${count}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Update button content
+            const title = selectedOption.querySelector('.option-title').textContent;
+            const description = selectedOption.querySelector('.option-description').textContent;
+            
+            content.innerHTML = `
+                <div class="dropdown-title">${title}</div>
+                <div class="dropdown-subtitle">${description}</div>
+            `;
+            
+            // Close dropdown
+            closeAllDropdowns();
+            
+            updateSummary();
+            updateStartButton();
+        }
+
+        function selectSubject(subject) {
+            selectedSubject = subject;
+            
+            // Update dropdown display
+            const dropdown = document.getElementById('subjectDropdown');
+            const button = dropdown.querySelector('.dropdown-button');
+            const content = button.querySelector('.dropdown-content');
+            
+            // Remove previous selections
+            dropdown.querySelectorAll('.dropdown-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            const selectedOption = dropdown.querySelector(`[data-subject="${subject}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Update button content
+            const title = selectedOption.querySelector('.option-title').textContent;
+            const description = selectedOption.querySelector('.option-description').textContent;
+            
+            content.innerHTML = `
+                <div class="dropdown-title">${title}</div>
+                <div class="dropdown-subtitle">${description}</div>
+            `;
+            
+            // Close dropdown
+            closeAllDropdowns();
+            
+            updateSummary();
+            updateStartButton();
+        }
+
+        function updateSummary() {
+            const summaryDiv = document.getElementById('quizSummary');
+            const summaryContent = document.getElementById('summaryContent');
+            
+            if (selectedQuestions && selectedSubject) {
+                const subjectNames = {
+                    'math': 'Mathematics',
+                    'reading': 'Reading Comprehension',
+                    'writing': 'Writing & Language',
+                    'mixed': 'Mixed Practice'
+                };
+
+                const estimatedTime = {
+                    5: '8-10 minutes',
+                    10: '15-20 minutes',
+                    15: '25-30 minutes',
+                    20: '35-40 minutes'
+                };
+
+                summaryContent.innerHTML = `
+                    <div class="summary-item">
+                        <span class="summary-label">Questions:</span>
+                        <span class="summary-value">${selectedQuestions} questions</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Subject:</span>
+                        <span class="summary-value">${subjectNames[selectedSubject]}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Estimated Time:</span>
+                        <span class="summary-value">${estimatedTime[selectedQuestions]}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Format:</span>
+                        <span class="summary-value">Multiple choice with feedback</span>
+                    </div>
+                `;
+                
+                summaryDiv.classList.add('show');
+            } else {
+                summaryDiv.classList.remove('show');
+            }
+        }
+
+        function updateStartButton() {
+            const startBtn = document.getElementById('startQuizBtn');
+            startBtn.disabled = !(selectedQuestions && selectedSubject);
+        }
+
+        function startQuiz() {
+            if (!selectedQuestions || !selectedSubject) {
+                alert('Please select both number of questions and subject area.');
+                return;
+            }
+
+            // Store quiz settings in localStorage
+            const quizSettings = {
+                questions: selectedQuestions,
+                subject: selectedSubject,
+                timestamp: Date.now()
+            };
+
+            localStorage.setItem('quizSettings', JSON.stringify(quizSettings));
+            localStorage.removeItem('quizResults'); // Clear any previous results
+
+            // Show loading state
+            const startBtn = document.getElementById('startQuizBtn');
+            startBtn.innerHTML = '<span>Starting Quiz...</span> ⏳';
+            startBtn.disabled = true;
+
+            // Redirect to quiz page after brief delay
+            setTimeout(() => {
+                window.location.href = 'quiz.html';
+            }, 800);
+        }
+    </script>
+</body>
+</html>
