@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}SAT Mock - Master the SAT with Mock Tests{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardCss.css') }}">
+{% endblock %}
+
+
+{% block body %}
+
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <div class="logo-icon">📚</div>
+                SAT Mock
+            </a>
+            <div class="nav-right">
+                <a href="/dashboard" class="dashboard-btn">Dashboard</a>
+                <div class="user-profile">
+                    <div class="user-icon">👤</div>
+                    <span id="username">User</span>
+                </div>
+                <form action="/logout" method="get">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome back, <span id="welcomeUsername">User</span>! 👋</h1>
+            <p class="welcome-subtitle">Ready to continue your SAT preparation? Let's boost that score!</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-title">Tests Taken</div>
+                <div class="stat-value" id="testsTaken">0</div>
+                <div class="stat-description">Keep practicing to improve!</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-title">Average Score</div>
+                <div class="stat-value percentage" id="averageScore">0%</div>
+                <div class="stat-description" id="scoreDescription">Take your first quiz!</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-title">Study Streak</div>
+                <div class="stat-value" id="studyStreak">0 days</div>
+                <div class="stat-description">Start your streak today!</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2 class="section-title">Quick Actions</h2>
+            <div class="actions-grid">
+                <button class="action-btn action-btn-primary" onclick="startNewQuiz()">
+                    ▶️ Start New Quiz
+                </button>
+                <button class="action-btn action-btn-secondary" onclick="startTimedPractice()">
+                    ⏱️ Timed Practice
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Quiz History -->
+        <div class="quiz-history">
+            <h2 class="section-title">Recent Quiz History</h2>
+            <div id="quizHistoryContainer">
+                <!-- Quiz history will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

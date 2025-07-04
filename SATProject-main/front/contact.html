@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - SAT Mock</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">📚</div>
+                    SAT Mock
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-link active">Contact</a>
+                </div>
+                <div class="nav-buttons" id="navButtons">
+                    <!-- Navigation will be populated by JavaScript -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Contact <span class="highlight">Us</span></h1>
+            <p>Have questions or need support? We're here to help you succeed on your SAT journey.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Contact Form and Info -->
+            <div class="content-grid">
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <h2 class="section-title">Send us a Message</h2>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" id="subject" name="subject" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea id="message" name="message" class="form-input form-textarea" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <h2 class="section-title">Get in Touch</h2>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-details">
+                            <h3>Email Us</h3>
+                            <p>support@satmock.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-details">
+                            <h3>Call Us</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h3>Visit Us</h3>
+                            <p>123 Education Street<br>Learning City, LC 12345</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">⏰</div>
+                        <div class="contact-details">
+                            <h3>Support Hours</h3>
+                            <p>Monday - Friday: 9AM - 6PM EST<br>Weekend: 10AM - 4PM EST</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="team-section">
+                <h2 class="section-title">Meet Our Team</h2>
+                <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 2rem;">Our dedicated team of educators and technologists is committed to helping you achieve your SAT goals.</p>
+                
+                <div class="team-grid">
+                    <!-- Team Member 1 -->
+                    <div class="team-member">
+                        <div class="member-avatar">👨‍💼</div>
+                        <h3 class="member-name">Alex Johnson</h3>
+                        <p class="member-role">CEO & Founder</p>
+                        <p class="member-bio">Former SAT tutor with 10+ years of experience. Alex founded SAT Mock to make quality test prep accessible to all students. He holds an MBA from Harvard Business School.</p>
+                        <div class="member-contact">
+                            <a href="mailto:alex@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">💼</a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 2 -->
+                    <div class="team-member">
+                        <div class="member-avatar">👩‍🏫</div>
+                        <h3 class="member-name">Dr. Sarah Chen</h3>
+                        <p class="member-role">Head of Education</p>
+                        <p class="member-bio">Educational psychologist specializing in standardized test preparation. Sarah designs our curriculum and ensures all content meets the highest educational standards. PhD in Educational Psychology from Stanford.</p>
+                        <div class="member-contact">
+                            <a href="mailto:sarah@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">🎓</a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="team-member">
+                        <div class="member-avatar">👨‍💻</div>
+                        <h3 class="member-name">Marcus Rodriguez</h3>
+                        <p class="member-role">Lead Developer</p>
+                        <p class="member-bio">Full-stack developer passionate about educational technology. Marcus leads our technical team and ensures our platform delivers the best user experience. Computer Science degree from MIT.</p>
+                        <div class="member-contact">
+                            <a href="mailto:marcus@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">💻</a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 4 -->
+                    <div class="team-member">
+                        <div class="member-avatar">👩‍🔬</div>
+                        <h3 class="member-name">Dr. Emily Watson</h3>
+                        <p class="member-role">AI Research Director</p>
+                        <p class="member-bio">Machine learning expert focused on educational AI. Emily develops our intelligent tutoring systems and personalized learning algorithms. PhD in Computer Science from Carnegie Mellon.</p>
+                        <div class="member-contact">
+                            <a href="mailto:emily@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">🔬</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 SAT Mock Testing Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const submitButton = this.querySelector('button[type="submit"]');
+            
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
+            
+            setTimeout(() => {
+                alert(`Thank you, ${name}! Your message has been sent. We'll get back to you within 24 hours.`);
+                this.reset();
+                submitButton.textContent = 'Send Message';
+                submitButton.disabled = false;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

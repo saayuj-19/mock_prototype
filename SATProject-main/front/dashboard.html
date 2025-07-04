@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SAT Mock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #4f46e5;
+            border-radius: 6px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .dashboard-btn {
+            padding: 0.5rem 1rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .user-icon {
+            width: 24px;
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 2rem 0;
+        }
+
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            position: relative;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 24px;
+            height: 24px;
+            color: #94a3b8;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value.percentage {
+            color: #4f46e5;
+        }
+
+        .stat-description {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .action-btn-secondary {
+            background: white;
+            color: #64748b;
+            border: 1px solid #e5e7eb;
+        }
+
+        .action-btn-secondary:hover {
+            background: #f9fafb;
+            transform: translateY(-2px);
+        }
+
+        /* Quiz History */
+        .quiz-history {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .quiz-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .quiz-item:last-child {
+            border-bottom: none;
+        }
+
+        .quiz-info {
+            flex: 1;
+        }
+
+        .quiz-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-score {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .score-high {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .score-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .score-low {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .quiz-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .quiz-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .quiz-btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .quiz-btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .quiz-btn-secondary {
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quiz-btn-secondary:hover {
+            background: #f1f5f9;
+        }
+
+        /* No history message */
+        .no-history {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+
+        .no-history-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .quiz-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .nav-right {
+                gap: 0.5rem;
+            }
+
+            .user-profile span {
+                display: none;
+            }
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">📚</div>
+                    SAT Mock
+                </a>
+                <div class="nav-right">
+                    <a href="dashboard.html" class="dashboard-btn">Dashboard</a>
+                    <div class="user-profile">
+                        <div class="user-icon">👤</div>
+                        <span id="username">User</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome back, <span id="welcomeUsername">User</span>! 👋</h1>
+                <p class="welcome-subtitle">Ready to continue your SAT preparation? Let's boost that score!</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-title">Tests Taken</div>
+                    <div class="stat-value" id="testsTaken">0</div>
+                    <div class="stat-description">Keep practicing to improve!</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-title">Average Score</div>
+                    <div class="stat-value percentage" id="averageScore">0%</div>
+                    <div class="stat-description" id="scoreDescription">Take your first quiz!</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-title">Study Streak</div>
+                    <div class="stat-value" id="studyStreak">0 days</div>
+                    <div class="stat-description">Start your streak today!</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="actions-grid">
+                    <button class="action-btn action-btn-primary" onclick="startNewQuiz()">
+                        ▶️ Start New Quiz
+                    </button>
+                    <button class="action-btn action-btn-secondary" onclick="startTimedPractice()">
+                        ⏱️ Timed Practice
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Quiz History -->
+            <div class="quiz-history">
+                <h2 class="section-title">Recent Quiz History</h2>
+                <div id="quizHistoryContainer">
+                    <!-- Quiz history will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample quiz history data structure
+        const sampleQuizHistory = [
+            {
+                id: 'math_1',
+                name: 'Math Practice Test',
+                score: 85,
+                correctAnswers: 17,
+                totalQuestions: 20,
+                timeSpent: 2700, // 45 minutes in seconds
+                date: '2024-01-15',
+                subject: 'Math'
+            },
+            {
+                id: 'reading_1',
+                name: 'Reading Practice Test',
+                score: 78,
+                correctAnswers: 15,
+                totalQuestions: 20,
+                timeSpent: 2520, // 42 minutes in seconds
+                date: '2024-01-12',
+                subject: 'Reading'
+            },
+            {
+                id: 'writing_1',
+                name: 'Writing Practice Test',
+                score: 92,
+                correctAnswers: 18,
+                totalQuestions: 20,
+                timeSpent: 2280, // 38 minutes in seconds
+                date: '2024-01-10',
+                subject: 'Writing'
+            }
+        ];
+
+        // Check if user is logged in
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const username = localStorage.getItem('username');
+            
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            if (username) {
+                document.getElementById('username').textContent = username;
+                document.getElementById('welcomeUsername').textContent = username;
+            }
+        }
+
+        // Initialize quiz history if it doesn't exist
+        function initializeQuizHistory() {
+            const existingHistory = localStorage.getItem('quizHistory');
+            if (!existingHistory) {
+                localStorage.setItem('quizHistory', JSON.stringify(sampleQuizHistory));
+            }
+        }
+
+        // Get quiz history from localStorage
+        function getQuizHistory() {
+            const history = localStorage.getItem('quizHistory');
+            return history ? JSON.parse(history) : [];
+        }
+
+        // Update dashboard stats
+        function updateStats() {
+            const quizHistory = getQuizHistory();
+            
+            if (quizHistory.length === 0) {
+                document.getElementById('testsTaken').textContent = '0';
+                document.getElementById('averageScore').textContent = '0%';
+                document.getElementById('scoreDescription').textContent = 'Take your first quiz!';
+                document.getElementById('studyStreak').textContent = '0 days';
+                return;
+            }
+
+            // Calculate stats
+            const testsTaken = quizHistory.length;
+            const totalScore = quizHistory.reduce((sum, quiz) => sum + quiz.score, 0);
+            const averageScore = Math.round(totalScore / testsTaken);
+            
+            // Update DOM
+            document.getElementById('testsTaken').textContent = testsTaken.toString();
+            document.getElementById('averageScore').textContent = `${averageScore}%`;
+            
+            // Update score description
+            let scoreDescription = 'Keep practicing!';
+            if (averageScore >= 90) {
+                scoreDescription = 'Excellent work!';
+            } else if (averageScore >= 80) {
+                scoreDescription = 'Great progress!';
+            } else if (averageScore >= 70) {
+                scoreDescription = 'Good improvement!';
+            }
+            document.getElementById('scoreDescription').textContent = scoreDescription;
+            
+            // Calculate study streak (simplified - just based on recent activity)
+            const today = new Date();
+            const lastQuizDate = new Date(quizHistory[0].date);
+            const daysDiff = Math.floor((today - lastQuizDate) / (1000 * 60 * 60 * 24));
+            const streak = daysDiff <= 1 ? Math.min(quizHistory.length, 7) : 0;
+            document.getElementById('studyStreak').textContent = `${streak} days`;
+        }
+
+        // Display quiz history
+        function displayQuizHistory() {
+            const quizHistory = getQuizHistory();
+            const container = document.getElementById('quizHistoryContainer');
+            
+            if (quizHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="no-history">
+                        <div class="no-history-icon">📝</div>
+                        <p>No quiz history yet. Take your first quiz to see your progress!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            
+            quizHistory.forEach((quiz, index) => {
+                const scoreClass = quiz.score >= 80 ? 'score-high' : quiz.score >= 60 ? 'score-medium' : 'score-low';
+                const minutes = Math.floor(quiz.timeSpent / 60);
+                const formattedDate = new Date(quiz.date).toLocaleDateString();
+                
+                const quizItem = document.createElement('div');
+                quizItem.className = 'quiz-item';
+                quizItem.innerHTML = `
+                    <div class="quiz-info">
+                        <div class="quiz-name">
+                            ${quiz.name}
+                            <span class="quiz-score ${scoreClass}">${quiz.score}%</span>
+                        </div>
+                        <div class="quiz-details">
+                            <span>📅 ${formattedDate}</span>
+                            <span>⏱️ ${minutes} min</span>
+                            <span>${quiz.correctAnswers}/${quiz.totalQuestions} correct</span>
+                        </div>
+                    </div>
+                    <div class="quiz-actions">
+                        <button class="quiz-btn quiz-btn-secondary" onclick="viewResults('${quiz.id}')">View Results</button>
+                        <button class="quiz-btn quiz-btn-primary" onclick="retakeQuiz('${quiz.subject}')">Retake</button>
+                    </div>
+                `;
+                
+                container.appendChild(quizItem);
+            });
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('username');
+                localStorage.removeItem('userEmail');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Quiz functions
+        function startNewQuiz() {
+            // Clear any existing quiz results to start fresh
+            localStorage.removeItem('quizResults');
+            window.location.href = 'quiz.html';
+        }
+
+        function startTimedPractice() {
+            // For now, redirect to the same quiz page
+            localStorage.removeItem('quizResults');
+            window.location.href = 'quiz.html';
+        }
+
+        function viewResults(quizId) {
+            // Find the quiz in history
+            const quizHistory = getQuizHistory();
+            const quiz = quizHistory.find(q => q.id === quizId);
+            
+            if (quiz) {
+                // Create a mock results object that matches the expected format
+                const mockResults = {
+                    score: quiz.score,
+                    correctAnswers: quiz.correctAnswers,
+                    totalQuestions: quiz.totalQuestions,
+                    timeSpent: quiz.timeSpent,
+                    userAnswers: generateMockAnswers(quiz),
+                    quizData: generateMockQuizData(quiz),
+                    completedAt: quiz.date
+                };
+                
+                // Store the results temporarily
+                localStorage.setItem('quizResults', JSON.stringify(mockResults));
+                
+                // Redirect to results page
+                window.location.href = 'results.html';
+            } else {
+                alert('Quiz results not found.');
+            }
+        }
+
+        function retakeQuiz(subject) {
+            // Clear any existing results and start a new quiz
+            localStorage.removeItem('quizResults');
+            window.location.href = 'quiz.html';
+        }
+
+        // Generate mock answers for historical quizzes
+        function generateMockAnswers(quiz) {
+            const answers = [];
+            for (let i = 0; i < quiz.totalQuestions; i++) {
+                if (i < quiz.correctAnswers) {
+                    answers.push(Math.floor(Math.random() * 4)); // Correct answer
+                } else {
+                    answers.push(Math.floor(Math.random() * 4)); // Random answer
+                }
+            }
+            return answers;
+        }
+
+        // Generate mock quiz data for historical quizzes
+        function generateMockQuizData(quiz) {
+            const subjects = {
+                'Math': [
+                    { question: "If 3x + 7 = 22, what is the value of x?", options: ["3", "5", "7", "15"], correct: 1 },
+                    { question: "What is the slope of the line passing through points (2, 3) and (6, 11)?", options: ["2", "3", "4", "8"], correct: 0 }
+                ],
+                'Reading': [
+                    { question: "Based on the context, what does the word 'ubiquitous' most likely mean?", options: ["Rare and valuable", "Present everywhere", "Difficult to understand", "Recently discovered"], correct: 1 },
+                    { question: "Which of the following best describes the main theme of the passage?", options: ["The challenges of modern technology", "The importance of environmental conservation", "The role of education in society", "The impact of globalization"], correct: 1 }
+                ],
+                'Writing': [
+                    { question: "Choose the sentence that is grammatically correct:", options: ["Neither the students nor the teacher were prepared for the exam.", "Neither the students nor the teacher was prepared for the exam.", "Neither the students or the teacher were prepared for the exam.", "Neither the students or the teacher was prepared for the exam."], correct: 1 }
+                ]
+            };
+
+            const subjectQuestions = subjects[quiz.subject] || subjects['Math'];
+            const quizData = [];
+            
+            for (let i = 0; i < quiz.totalQuestions; i++) {
+                const questionIndex = i % subjectQuestions.length;
+                quizData.push({
+                    subject: quiz.subject,
+                    ...subjectQuestions[questionIndex]
+                });
+            }
+            
+            return quizData;
+        }
+
+        // Add new quiz result to history
+        function addQuizToHistory(results) {
+            const quizHistory = getQuizHistory();
+            const newQuiz = {
+                id: `quiz_${Date.now()}`,
+                name: `${results.quizData[0]?.subject || 'Mixed'} Practice Test`,
+                score: results.score,
+                correctAnswers: results.correctAnswers,
+                totalQuestions: results.totalQuestions,
+                timeSpent: results.timeSpent,
+                date: new Date().toISOString().split('T')[0],
+                subject: results.quizData[0]?.subject || 'Mixed'
+            };
+            
+            quizHistory.unshift(newQuiz); // Add to beginning
+            
+            // Keep only last 10 quizzes
+            if (quizHistory.length > 10) {
+                quizHistory.splice(10);
+            }
+            
+            localStorage.setItem('quizHistory', JSON.stringify(quizHistory));
+        }
+
+        // Check if there are new quiz results to add to history
+        function checkForNewResults() {
+            const results = localStorage.getItem('quizResults');
+            const resultsProcessed = localStorage.getItem('resultsProcessed');
+            
+            if (results && !resultsProcessed) {
+                const parsedResults = JSON.parse(results);
+                addQuizToHistory(parsedResults);
+                localStorage.setItem('resultsProcessed', 'true');
+            }
+        }
+
+        // Initialize dashboard
+        window.addEventListener('load', function() {
+            checkAuth();
+            initializeQuizHistory();
+            checkForNewResults();
+            updateStats();
+            displayQuizHistory();
+        });
+
+        // Clear the resultsProcessed flag when starting a new quiz
+        window.addEventListener('beforeunload', function() {
+            if (window.location.href.includes('quiz.html')) {
+                localStorage.removeItem('resultsProcessed');
+            }
+        });
+    </script>
+</body>
+</html>

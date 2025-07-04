@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAT Practice Test - SAT Mock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .quiz-header {
+            background: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quiz-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .subject-badge {
+            background: #eff6ff;
+            color: #4f46e5;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .timer-icon {
+            font-size: 1.1rem;
+        }
+
+        .submit-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: #4338ca;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: white;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-info {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .answered-info {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4f46e5;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Question Section */
+        .question-section {
+            background: white;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .question-content {
+            padding: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+        .option.selected {
+            border-color: #4f46e5;
+            background: #eff6ff;
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            color: #374151;
+        }
+
+        /* Navigation */
+        .navigation {
+            background: white;
+            padding: 1.5rem 0;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.primary {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        .nav-btn.primary:hover:not(:disabled) {
+            background: #4338ca;
+        }
+
+        .question-numbers {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .question-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .question-number:hover {
+            border-color: #cbd5e1;
+        }
+
+        .question-number.current {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        .question-number.answered {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .question-numbers {
+                order: -1;
+            }
+
+            .question-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Quiz Header -->
+    <header class="quiz-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="quiz-title">
+                    <h1>SAT Practice Test</h1>
+                    <span class="subject-badge" id="subjectBadge">Math</span>
+                </div>
+                <div class="header-right">
+                    <div class="timer">
+                        <span class="timer-icon">⏱️</span>
+                        <span id="timerDisplay">25:00</span>
+                    </div>
+                    <button class="submit-btn" onclick="submitQuiz()">
+                        📋 Submit Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Section -->
+    <div class="progress-section">
+        <div class="container">
+            <div class="progress-info">
+                <span class="question-info" id="questionInfo">Question 1 of 5</span>
+                <span class="answered-info" id="answeredInfo">0 answered</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Question Section -->
+        <div class="question-section">
+            <div class="question-content">
+                <div class="question-text" id="questionText">
+                    If 3x + 7 = 22, what is the value of x?
+                </div>
+                <div class="options-list" id="optionsList">
+                    <div class="option" onclick="selectOption(0)">
+                        <div class="option-letter">A</div>
+                        <div class="option-text">3</div>
+                    </div>
+                    <div class="option" onclick="selectOption(1)">
+                        <div class="option-letter">B</div>
+                        <div class="option-text">5</div>
+                    </div>
+                    <div class="option" onclick="selectOption(2)">
+                        <div class="option-letter">C</div>
+                        <div class="option-text">7</div>
+                    </div>
+                    <div class="option" onclick="selectOption(3)">
+                        <div class="option-letter">D</div>
+                        <div class="option-text">15</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <div class="nav-content">
+                <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" disabled>
+                    ← Previous
+                </button>
+                
+                <div class="question-numbers" id="questionNumbers">
+                    <div class="question-number current" onclick="goToQuestion(0)">1</div>
+                    <div class="question-number" onclick="goToQuestion(1)">2</div>
+                    <div class="question-number" onclick="goToQuestion(2)">3</div>
+                    <div class="question-number" onclick="goToQuestion(3)">4</div>
+                    <div class="question-number" onclick="goToQuestion(4)">5</div>
+                </div>
+                
+                <button class="nav-btn primary" id="nextBtn" onclick="nextQuestion()">
+                    Next →
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Quiz data
+        const quizData = [
+            {
+                subject: "Math",
+                question: "If 3x + 7 = 22, what is the value of x?",
+                options: ["3", "5", "7", "15"],
+                correct: 1
+            },
+            {
+                subject: "Reading",
+                question: "Which of the following best describes the main theme of the passage?",
+                options: ["The challenges of modern technology", "The importance of environmental conservation", "The role of education in society", "The impact of globalization"],
+                correct: 1
+            },
+            {
+                subject: "Writing",
+                question: "Choose the sentence that is grammatically correct:",
+                options: [
+                    "Neither the students nor the teacher were prepared for the exam.",
+                    "Neither the students nor the teacher was prepared for the exam.",
+                    "Neither the students or the teacher were prepared for the exam.",
+                    "Neither the students or the teacher was prepared for the exam."
+                ],
+                correct: 1
+            },
+            {
+                subject: "Math",
+                question: "What is the slope of the line passing through points (2, 3) and (6, 11)?",
+                options: ["2", "3", "4", "8"],
+                correct: 0
+            },
+            {
+                subject: "Reading",
+                question: "Based on the context, what does the word 'ubiquitous' most likely mean?",
+                options: ["Rare and valuable", "Present everywhere", "Difficult to understand", "Recently discovered"],
+                correct: 1
+            }
+        ];
+
+        // Quiz state
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let timeRemaining = 25 * 60; // 25 minutes in seconds
+        let timerInterval;
+
+        // Initialize quiz
+        function initializeQuiz() {
+            // Check authentication
+            if (!localStorage.getItem('isLoggedIn')) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            startTimer();
+            displayQuestion();
+            updateProgress();
+        }
+
+        // Timer functions
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Question display
+        function displayQuestion() {
+            const question = quizData[currentQuestion];
+            
+            document.getElementById('subjectBadge').textContent = question.subject;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.onclick = () => selectOption(index);
+                
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                
+                optionsList.appendChild(optionElement);
+            });
+            
+            updateNavigation();
+        }
+
+        // Option selection
+        function selectOption(index) {
+            userAnswers[currentQuestion] = index;
+            
+            // Update visual selection
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, i) => {
+                option.classList.toggle('selected', i === index);
+            });
+            
+            updateProgress();
+            updateQuestionNumbers();
+        }
+
+        // Navigation
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+                updateProgress();
+                updateQuestionNumbers();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+                updateProgress();
+                updateQuestionNumbers();
+            }
+        }
+
+        function goToQuestion(index) {
+            currentQuestion = index;
+            displayQuestion();
+            updateProgress();
+            updateQuestionNumbers();
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === quizData.length - 1) {
+                nextBtn.textContent = 'Submit Quiz';
+                nextBtn.onclick = submitQuiz;
+            } else {
+                nextBtn.textContent = 'Next →';
+                nextBtn.onclick = nextQuestion;
+            }
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(answer => answer !== null).length;
+            const progressPercentage = ((currentQuestion + 1) / quizData.length) * 100;
+            
+            document.getElementById('questionInfo').textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            document.getElementById('answeredInfo').textContent = `${answeredCount} answered`;
+            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+        }
+
+        function updateQuestionNumbers() {
+            const questionNumbers = document.querySelectorAll('.question-number');
+            questionNumbers.forEach((number, index) => {
+                number.classList.remove('current', 'answered');
+                
+                if (index === currentQuestion) {
+                    number.classList.add('current');
+                } else if (userAnswers[index] !== null) {
+                    number.classList.add('answered');
+                }
+            });
+        }
+
+        // Quiz submission
+        function submitQuiz() {
+            if (confirm('Are you sure you want to submit your quiz?')) {
+                clearInterval(timerInterval);
+                
+                // Calculate results
+                const totalTime = 25 * 60 - timeRemaining;
+                let correctAnswers = 0;
+                
+                userAnswers.forEach((answer, index) => {
+                    if (answer === quizData[index].correct) {
+                        correctAnswers++;
+                    }
+                });
+                
+                const score = Math.round((correctAnswers / quizData.length) * 100);
+                
+                // Store results
+                const results = {
+                    score: score,
+                    correctAnswers: correctAnswers,
+                    totalQuestions: quizData.length,
+                    timeSpent: totalTime,
+                    userAnswers: userAnswers,
+                    quizData: quizData,
+                    completedAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('quizResults', JSON.stringify(results));
+                
+                // Redirect to results page
+                window.location.href = 'results.html';
+            }
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initializeQuiz);
+
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+            if (timeRemaining > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>
