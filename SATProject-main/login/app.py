@@ -1,15 +1,27 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask_mail import Mail, Message
 from flask_session import Session
 from func import generate_user_id, validEmail
 from cs50 import SQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
+import random
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.secret_key = os.getenv('SECRET_KEY')
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')
+mail = Mail(app)
 Session(app)
 
 db = SQL("sqlite:///data.db")
@@ -80,27 +92,55 @@ def signup():
         elif not validEmail(email):
             return "email failure"
         
-        userId = generate_user_id(user)
-        passwordHash = generate_password_hash(password)
-        
-        try:
-            db.execute("""INSERT INTO users (id, username, email, password_hash) VALUES (?, ?, ?, ?)""",userId, user, email, passwordHash)
-            session["userId"] = userId
-        except Exception as e:
-            return f"Exception: {str(e)}"
-        
-        return redirect("/")
     
-    return redirect("/")
+        user = request.form.get("usr")
+        email = request.form.get("email")
+        password = request.form.get("pwd")
 
-@app.route("/quiz")
-def quiz():
-    try:
-        db.execute("")
-    except Exception as e:
-        return "Failed to fetch questions."
+        otp = str(random.randint(100000, 999999))
+        session['otp'] = otp
+        session['email'] = email
+        session['user'] = user
+        session['password'] = password
 
-    return render_template("quiz.html")
+        html = render_template('emailTemplate.html', otp=otp, name=user)
+        msg = Message('Your OTP Verification Code', recipients=[email], html=html)
+        mail.send(msg)
+
+        return redirect("/verify")
+    
+    if request.method == "GET":
+        if session.get("user") and session.get("email") and session.get("password") and session.get("otp"):
+            user = session.get("user")
+            email = session.get("email")
+            password = session.get("password")
+
+            userId = generate_user_id(user)
+            passwordHash = generate_password_hash(password)
+            
+            try:
+                db.execute("""INSERT INTO users (id, username, email, password_hash) VALUES (?, ?, ?, ?)""",userId, user, email, passwordHash)
+                session.clear()
+                session["userId"] = userId
+            except Exception as e:
+                return f"Exception: {str(e)}"
+            
+            return redirect("/")
+
+
+@app.route('/verify', methods=['GET', 'POST'])
+def verify():
+    if request.method == 'POST':
+        entered_otp = request.form.get("otp")
+        actual_otp = session.get("otp")
+
+        if entered_otp == actual_otp:
+            return redirect("/signup")
+        else:
+            flash('Invalid OTP. Please try again.', 'danger')
+            return render_template('verify.html')
+
+    return render_template('verify.html')
 
 @app.route("/logout")
 def logout():
@@ -190,3 +230,28 @@ def questionRegister():
                 return f"Image DB insert failed: {e}", 500
 
         return "success"
+
+@app.route("/startQuiz")
+def startQuiz():
+    userId = session.get("userId")
+    
+    if not userId:
+        return render_template("startQuiz.html", username=None)
+    elif userId:
+        try:
+            username = db.execute("SELECT username FROM users WHERE id = ?", userId)
+        except Exception as e:
+            return "Exception"
+        
+        return render_template("startQuiz.html", username=username[0]["username"])
+
+@app.route("/quiz", methods=["GET", "POST"])
+def quiz():
+    if request.method == "POST":
+        questions = request.form.get("questions")
+        subject = request.form.get("subject")
+        # Just return the selected values for now
+        return f"Questions: {questions}  Subject: {subject}"
+
+    return render_template("quiz.html")
+
