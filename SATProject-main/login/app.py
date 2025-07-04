@@ -270,6 +270,44 @@ def quiz():
     else:
         return redirect("/startQuiz")
 
+@app.route("/submit-quiz", methods=["POST"])
+def submit_quiz():
+    submitted_answers = request.form
+    total_questions = 0
+    correct_answers = 0
+    results = []
+
+    for question_id_key in submitted_answers:
+        if question_id_key.startswith("answer_"):
+            question_id = question_id_key.split("answer_")[1]
+            user_answer = submitted_answers[question_id_key]
+
+            # Get correct answer
+            correct = db.execute("SELECT optionLabel FROM answers WHERE questionId = ? AND isCorrect = 1", question_id)
+            question = db.execute("SELECT * FROM questions WHERE id = ?", question_id)
+
+            if not correct or not question:
+                continue
+
+            question_text = question[0]["questionText"]
+            explanation = question[0]["explanation"]
+            correct_option = correct[0]["optionLabel"]
+
+            is_correct = (user_answer == correct_option)
+            if is_correct:
+                correct_answers += 1
+            total_questions += 1
+
+            results.append({
+                "question": question_text,
+                "your_answer": user_answer,
+                "correct_answer": correct_option,
+                "explanation": explanation,
+                "is_correct": is_correct
+            })
+
+    score = round((correct_answers / total_questions) * 100, 2) if total_questions > 0 else 0
+    return render_template("results.html", results=results, score=score, total=total_questions, correct=correct_answers)
 
 if __name__ == "__main__":
     app.run(debug=True)

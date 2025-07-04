@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Results</title>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .correct { color: green; }
+        .incorrect { color: red; }
+        .question-block { margin-bottom: 25px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Quiz Results</h1>
+    <p><strong>Score:</strong> {{ score }}% ({{ correct }}/{{ total }})</p>
+    <hr>
+
+    {% for item in results %}
+        <div class="question-block">
+            <p><strong>Question {{ loop.index }}:</strong> <span class="mathjax">{{ item.question }}</span></p>
+            <p>
+                <strong>Your Answer:</strong>
+                <span class="{{ 'correct' if item.is_correct else 'incorrect' }}">
+                    {{ item.your_answer }}
+                </span>
+            </p>
+            <p><strong>Correct Answer:</strong> {{ item.correct_answer }}</p>
+            <p><strong>Explanation:</strong> <span class="mathjax">{{ item.explanation }}</span></p>
+        </div>
+    {% endfor %}
+</body>
+</html>
