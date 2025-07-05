@@ -49,7 +49,17 @@ def register():
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+    userId = session.get("userId")
+    
+    if not userId:
+        return render_template("dashboard.html", username=None)
+    elif userId:
+        try:
+            username = db.execute("SELECT username FROM users WHERE id = ?", userId)
+        except Exception as e:
+            return "Exception"
+        
+        return render_template("dashboard.html", username=username[0]["username"])
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

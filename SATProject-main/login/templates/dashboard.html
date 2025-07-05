@@ -21,7 +21,7 @@
                 <a href="/dashboard" class="dashboard-btn">Dashboard</a>
                 <div class="user-profile">
                     <div class="user-icon">👤</div>
-                    <span id="username">User</span>
+                    <span id="username">{{ username }}</span>
                 </div>
                 <form action="/logout" method="get">
                     <button type="submit" class="logout-btn">Logout</button>
@@ -36,7 +36,7 @@
     <div class="container">
         <!-- Welcome Section -->
         <div class="welcome-section">
-            <h1 class="welcome-title">Welcome back, <span id="welcomeUsername">User</span>! 👋</h1>
+            <h1 class="welcome-title">Welcome back, <span id="welcomeUsername">{{ username }}</span>! 👋</h1>
             <p class="welcome-subtitle">Ready to continue your SAT preparation? Let's boost that score!</p>
         </div>
 
@@ -68,12 +68,12 @@
         <div class="quick-actions">
             <h2 class="section-title">Quick Actions</h2>
             <div class="actions-grid">
-                <button class="action-btn action-btn-primary" onclick="startNewQuiz()">
+                <button class="action-btn action-btn-primary" onclick="window.location.href = '/startQuiz'">
                     ▶️ Start New Quiz
                 </button>
-                <button class="action-btn action-btn-secondary" onclick="startTimedPractice()">
+                <!-- <button class="action-btn action-btn-secondary" onclick="startTimedPractice()">
                     ⏱️ Timed Practice
-                </button>
+                </button> -->
             </div>
         </div>
 

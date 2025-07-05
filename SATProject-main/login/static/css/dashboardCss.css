@@ -191,6 +191,9 @@ body {
     font-weight: 500;
     display: flex;
     align-items: center;
+    position: relative;
+    left: 50%;
+    transform: translateX(-25%);
     justify-content: center;
     gap: 0.5rem;
     transition: all 0.2s;
@@ -206,7 +209,6 @@ body {
 
 .action-btn-primary:hover {
     background: #4338ca;
-    transform: translateY(-2px);
 }
 
 .action-btn-secondary {
