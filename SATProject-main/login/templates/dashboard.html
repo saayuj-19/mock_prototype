@@ -15,7 +15,7 @@
         <nav class="nav">
             <a href="/" class="logo">
                 <div class="logo-icon">📚</div>
-                SAT Mock
+                SAT Scholars
             </a>
             <div class="nav-right">
                 <a href="/dashboard" class="dashboard-btn">Dashboard</a>
@@ -81,7 +81,17 @@
         <div class="quiz-history">
             <h2 class="section-title">Recent Quiz History</h2>
             <div id="quizHistoryContainer">
-                <!-- Quiz history will be populated by JavaScript -->
+                <div class="quiz-info">
+                    <div class="quiz-name">
+                        ${quiz.name}
+                        <span class="quiz-score ${scoreClass}">${quiz.score}%</span>
+                    </div>
+                    <div class="quiz-details">
+                        <span>📅 ${formattedDate}</span>
+                        <span>${quiz.correctAnswers}/${quiz.totalQuestions} correct</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

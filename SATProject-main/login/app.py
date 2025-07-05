@@ -61,6 +61,34 @@ def dashboard():
         
         return render_template("dashboard.html", username=username[0]["username"])
 
+@app.route("/about")
+def about():
+    userId = session.get("userId")
+    
+    if not userId:
+        return render_template("about.html", username=None)
+    elif userId:
+        try:
+            username = db.execute("SELECT username FROM users WHERE id = ?", userId)
+        except Exception as e:
+            return "Exception"
+        
+        return render_template("about.html", username=username[0]["username"])
+
+@app.route("/contact")
+def contact():
+    userId = session.get("userId")
+    
+    if not userId:
+        return render_template("contact.html", username=None)
+    elif userId:
+        try:
+            username = db.execute("SELECT username FROM users WHERE id = ?", userId)
+        except Exception as e:
+            return "Exception"
+        
+        return render_template("contact.html", username=username[0]["username"])
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
